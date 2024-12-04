@@ -1,0 +1,33 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Estado {
+  id      Int      @id @default(autoincrement())
+  sigla   String   @unique
+  nome    String
+  municipios Municipio[]
+}
+
+model Municipio {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  populacao  Int
+  estadoId   Int
+  estado     Estado   @relation(fields: [estadoId], references: [id])
+  pesquisas  Pesquisa[]
+}
+
+model Pesquisa {
+  id            Int      @id @default(autoincrement())
+  idPesquisa    String
+  dataPesquisa  DateTime
+  municipioId   Int
+  municipio     Municipio @relation(fields: [municipioId], references: [id])
+  intencaoVoto  String    // Representa o ID do candidato, por exemplo, "A" ou "B"
+}
