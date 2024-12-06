@@ -15,19 +15,22 @@ model Estado {
 }
 
 model Municipio {
-  id         Int      @id @default(autoincrement())
-  nome       String
-  populacao  Int
-  estadoId   Int
-  estado     Estado   @relation(fields: [estadoId], references: [id])
-  pesquisas  Pesquisa[]
+  id          Int        @id @default(autoincrement())
+  nome        String
+  estadoId    Int
+  estado      Estado     @relation(fields: [estadoId], references: [id])
+  populacao   Int        @default(0)
+  pesquisas   Pesquisa[] // Relação bidirecional com o modelo `Pesquisa`
+
+  @@unique([nome, estadoId])
 }
 
 model Pesquisa {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   idPesquisa    String
   dataPesquisa  DateTime
   municipioId   Int
   municipio     Municipio @relation(fields: [municipioId], references: [id])
   intencaoVoto  String    // Representa o ID do candidato, por exemplo, "A" ou "B"
 }
+
